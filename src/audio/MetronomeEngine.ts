@@ -118,11 +118,15 @@ export class MetronomeEngine {
     const context = this.context!;
     const oscillator = context.createOscillator();
     const envelope = context.createGain();
-    oscillator.type = 'sine';
-    oscillator.frequency.setValueAtTime(main ? 1320 : 880, time);
+    // NiceChord's short square-wave C5/G4 clicks provide a clearer transient
+    // than a sine tone. Tiny edge fades avoid an abrupt cut at the end.
+    const duration = main ? 0.05 : 0.03;
+    oscillator.type = 'square';
+    oscillator.frequency.setValueAtTime(main ? 523.25 : 392, time);
     envelope.gain.setValueAtTime(0, time);
-    envelope.gain.linearRampToValueAtTime(main ? 0.7 : 0.35, time + 0.0015);
-    envelope.gain.exponentialRampToValueAtTime(0.001, time + (main ? 0.045 : 0.03));
+    envelope.gain.linearRampToValueAtTime(main ? 0.25 : 0.15, time + 0.0005);
+    envelope.gain.exponentialRampToValueAtTime(0.01, time + duration);
+    envelope.gain.linearRampToValueAtTime(0, time + duration + 0.002);
     oscillator.connect(envelope);
     envelope.connect(this.master!);
     this.voices.add(oscillator);
@@ -132,7 +136,7 @@ export class MetronomeEngine {
       envelope.disconnect();
     };
     oscillator.start(time);
-    oscillator.stop(time + 0.055);
+    oscillator.stop(time + duration + 0.002);
   }
 
   private animate = () => {
