@@ -22,6 +22,7 @@ export default function App() {
   const [bpmDraft, setBpmDraft] = useState<string | number>(settings.bpm);
   const [playing, setPlaying] = useState(false);
   const [starting, setStarting] = useState(false);
+  const [elapsedSeconds, setElapsedSeconds] = useState(0);
   const [error, setError] = useState('');
   const [customOpen, setCustomOpen] = useState(settings.preset === 'custom');
   const [customDraft, setCustomDraft] = useState(settings.custom);
@@ -41,6 +42,7 @@ export default function App() {
   const offsets = useMemo(() => settings.preset === 'custom'
     ? parseOffsets(settings.custom).offsets : [...(preset?.offsets ?? [])], [settings.preset, settings.custom, preset]);
   const rhythmName = preset?.name ?? '自定义节奏';
+  const elapsedTime = `${String(Math.floor(elapsedSeconds / 60)).padStart(2, '0')}:${String(elapsedSeconds % 60).padStart(2, '0')}`;
 
   const update = useCallback((patch: Partial<Settings>) => setSettings((current) => ({ ...current, ...patch })), []);
   const setBpm = useCallback((value: number) => {
@@ -68,6 +70,15 @@ export default function App() {
     saveSettings(settings);
   }, [settings, offsets]);
 
+  useEffect(() => {
+    if (!playing) return;
+    const startedAt = performance.now();
+    const timer = window.setInterval(() => {
+      setElapsedSeconds(Math.floor((performance.now() - startedAt) / 1000));
+    }, 250);
+    return () => window.clearInterval(timer);
+  }, [playing]);
+
   const toggle = useCallback(async () => {
     if (playingRef.current || startingRef.current) {
       engine.current?.stop();
@@ -82,7 +93,7 @@ export default function App() {
     setStarting(true);
     try {
       const started = await engine.current?.start();
-      if (started) { playingRef.current = true; setPlaying(true); }
+      if (started) { playingRef.current = true; setElapsedSeconds(0); setPlaying(true); }
     } catch {
       setError('暂时无法播放声音，请检查浏览器音频权限后重试。');
     } finally { startingRef.current = false; setStarting(false); }
@@ -160,7 +171,7 @@ export default function App() {
           <div className="tempo-slider"><Slider thumbLabel="速度滑块" value={settings.bpm} onChange={setBpm} min={MIN_BPM} max={MAX_BPM} label={null} size={5} thumbSize={20} /><div className="range-labels"><span>20</span><span>拖动调速 · 点击数字输入</span><span>300</span></div></div>
           <div className="bpm-presets" role="group" aria-label="常用 BPM">{COMMON_BPMS.map((bpm) => <Button key={bpm} className="bpm-preset" variant={settings.bpm === bpm ? 'filled' : 'default'} aria-label={`设为 ${bpm} BPM`} aria-pressed={settings.bpm === bpm} onClick={() => setBpm(bpm)}>{bpm}</Button>)}</div>
           <div className="transport">
-            <Button className="play-button" size="xl" radius="md" onClick={() => void toggle()} leftSection={playing ? <IconPlayerStopFilled size={20} /> : <IconPlayerPlayFilled size={20} />} aria-label={playing ? '停止节拍器' : '开始节拍器'}>{playing ? '停止' : starting ? '取消' : '开始'}<span className="button-key">SPACE</span></Button>
+            <Button className="play-button" size="xl" radius="md" onClick={() => void toggle()} leftSection={playing ? <IconPlayerStopFilled size={20} /> : <IconPlayerPlayFilled size={20} />} aria-label={playing ? '停止节拍器' : '开始节拍器'}>{playing ? '停止' : starting ? '取消' : '开始'}{playing ? <span className="button-timer" role="timer" aria-label="运行时间">{elapsedTime}</span> : <span className="button-key">SPACE</span>}</Button>
             <Tooltip label="连续点击测算速度（T）"><Button className={`tap-button ${tapCount ? 'tapped' : ''}`} variant="default" size="xl" radius="md" onClick={tap} aria-label="点击测速 Tap Tempo"><IconHandClick size={23} stroke={1.5} /><span>{tapCount ? `已点击 ${tapCount} 次` : '点击测速'}</span></Button></Tooltip>
           </div>
           <div className="audio-controls"><Tooltip label={settings.muted ? '取消静音（M）' : '静音（M）'}><ActionIcon variant="subtle" color="dark" size="lg" onClick={() => update({ muted: !settings.muted })} aria-label={settings.muted ? '取消静音' : '静音'} aria-pressed={settings.muted}>{settings.muted || settings.volume === 0 ? <IconVolumeOff size={21} stroke={1.5} /> : <IconVolume size={21} stroke={1.5} />}</ActionIcon></Tooltip><Slider thumbLabel="音量" value={settings.volume} onChange={(volume) => update({ volume, muted: false })} label={(value) => `${value}%`} size={4} thumbSize={12} className="volume-slider" /><span>{settings.muted ? '静音' : `${settings.volume}%`}</span></div>

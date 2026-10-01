@@ -37,6 +37,7 @@ h1 { color: #234f47; font-weight: 600; font-size: 24px; margin: 0; line-height: 
 .transport { display: flex; gap: 12px; margin-top: 20px; }
 .play-button { flex: 1; background: #244f44; height: 58px; font-weight: 500; font-size: 15px; padding: 0 18px; }
 .play-button:hover { background: #193f35; }
+.button-timer { margin-left: 12px; font-variant-numeric: tabular-nums; }
 .button-key { font-size: 8px; font-weight: 400; border: 1px solid #ffffff35; padding: 2px 4px; border-radius: 4px; margin-left: 20px; color: #ffffffa8; letter-spacing: .8px; }
 .tap-button { padding: 0 14px; height: 58px; color: #53644f; border-color: #dfe3d5; background: #f7f8f0; font-size: 12px; font-weight: 500; }
 .tap-button .mantine-Button-label { gap: 9px; }.tap-button.tapped { background: #e9eddf; }
