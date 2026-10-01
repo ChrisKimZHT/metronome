@@ -6,6 +6,7 @@ import { clampBpm, MAX_BPM, MIN_BPM, parseOffsets, PRESETS, tapBpm, tempoName } 
 import { loadSettings, saveSettings, type Settings } from './settings';
 
 const COMMON_BPMS = [60, 72, 80, 90, 100, 120, 144, 160, 180, 200];
+const FAVICON_URL = './favicon.svg';
 
 function RhythmGlyph({ offsets, large = false }: { offsets: readonly number[]; large?: boolean }) {
   return <svg className={large ? 'rhythm-glyph large' : 'rhythm-glyph'} viewBox="0 0 100 32" aria-hidden="true">
@@ -146,7 +147,7 @@ export default function App() {
 
   return <div className="app-shell">
     <header className="site-header">
-      <div className="brand"><img src="/favicon.svg" width="36" height="36" alt="" /><h1>节拍器</h1></div>
+      <div className="brand"><img src={FAVICON_URL} width="36" height="36" alt="" /><h1>节拍器</h1></div>
       <Tooltip label="键盘快捷键"><ActionIcon variant="subtle" color="dark" size="lg" aria-label="查看键盘快捷键" onClick={() => setShortcutsOpen(true)}><IconKeyboard size={21} stroke={1.5} /></ActionIcon></Tooltip>
     </header>
 
