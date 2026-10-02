@@ -25,7 +25,7 @@ export default function App() {
   const [starting, setStarting] = useState(false);
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
   const [error, setError] = useState('');
-  const [customOpen, setCustomOpen] = useState(settings.preset === 'custom');
+  const [customOpen, setCustomOpen] = useState(true);
   const [customDraft, setCustomDraft] = useState(settings.custom);
   const [customError, setCustomError] = useState('');
   const [shortcutsOpen, setShortcutsOpen] = useState(false);
