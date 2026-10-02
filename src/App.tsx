@@ -119,8 +119,8 @@ export default function App() {
       const target = event.target as HTMLElement;
       if (target.closest('input, textarea, select, [contenteditable="true"], [role="slider"]')) return;
       if (event.code === 'Space') {
-        // Native buttons already handle Space; keep their behavior intact.
-        if (target.closest('button')) return;
+        // Keep Space as the transport shortcut even when a button has focus.
+        // Prevent the native Space click so the focused button is not activated too.
         event.preventDefault();
         if (!event.repeat) void toggle();
       } else if (event.code === 'KeyT') {
@@ -203,6 +203,6 @@ export default function App() {
 
     </main>
 
-    <Modal closeButtonProps={{ 'aria-label': '关闭快捷键说明' }} opened={shortcutsOpen} onClose={() => setShortcutsOpen(false)} title="键盘快捷键" centered radius="lg"><p className="modal-description">输入文字或操作控件时，优先使用控件自身的按键。</p><div className="shortcut-list"><div><span>开始 / 停止</span><Kbd>Space</Kbd></div><div><span>点击测速</span><Kbd>T</Kbd></div><div><span>速度 ±1 BPM</span><span><Kbd>↑</Kbd> <Kbd>↓</Kbd></span></div><div><span>速度 ±5 BPM</span><span><Kbd>Shift</Kbd> + <Kbd>↑ / ↓</Kbd></span></div><div><span>静音 / 取消静音</span><Kbd>M</Kbd></div></div></Modal>
+    <Modal closeButtonProps={{ 'aria-label': '关闭快捷键说明' }} opened={shortcutsOpen} onClose={() => setShortcutsOpen(false)} title="键盘快捷键" centered radius="lg"><p className="modal-description">输入文字或操作滑块时，优先使用控件自身的按键。按钮聚焦时，空格仍控制开始 / 停止，Enter 触发按钮。此说明窗口打开时，快捷键暂停。</p><div className="shortcut-list"><div><span>开始 / 停止</span><Kbd>Space</Kbd></div><div><span>点击测速</span><Kbd>T</Kbd></div><div><span>速度 ±1 BPM</span><span><Kbd>↑</Kbd> <Kbd>↓</Kbd></span></div><div><span>速度 ±5 BPM</span><span><Kbd>Shift</Kbd> + <Kbd>↑ / ↓</Kbd></span></div><div><span>静音 / 取消静音</span><Kbd>M</Kbd></div></div></Modal>
   </div>;
 }
