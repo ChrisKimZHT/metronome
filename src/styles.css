@@ -5,6 +5,9 @@ button, input { -webkit-tap-highlight-color: transparent; }
 button:focus-visible, a:focus-visible { outline: 3px solid var(--mantine-primary-color-filled); outline-offset: 4px; }
 button { touch-action: manipulation; }
 .app-shell { max-width: 1160px; padding: 0 48px 16px; margin: 0 auto; }
+.pwa-status { margin-top: 16px; padding: 12px 16px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; background: var(--mantine-color-blue-light); border-radius: 10px; }
+.pwa-status p { margin: 0; font-size: 13px; }
+.pwa-actions { display: flex; gap: 8px; }
 .site-header { height: 80px; display: flex; align-items: center; justify-content: space-between; }
 .brand { display: flex; align-items: center; gap: 12px; }
 h1 { color: var(--mantine-color-text); font-weight: 600; font-size: 24px; margin: 0; line-height: 1.4; }
