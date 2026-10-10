@@ -14,7 +14,7 @@ export const PRESETS = [
   { id: 'sextuplet', name: '六连音', detail: '均分 6 份', offsets: divisions(6) },
   { id: 'septuplet', name: '七连音', detail: '均分 7 份', offsets: divisions(7) },
   { id: 'polyrhythm', name: '二对三', detail: '交叠的律动', offsets: [1 / 3, 0.5, 2 / 3] },
-  { id: 'light-swing', name: '轻 Swing', detail: '58% 摇摆', offsets: [0.58] },
+  { id: 'polyrhythm-3-4', name: '三对四', detail: '三等分与四等分交叠', offsets: [1 / 4, 1 / 3, 1 / 2, 2 / 3, 3 / 4] },
 ] as const;
 
 export function parseOffsets(input: string): { offsets: number[]; error?: string } {
