@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { ActionIcon, Button, Collapse, Kbd, Modal, NumberInput, Slider, TextInput, Tooltip } from '@mantine/core';
-import { IconCheck, IconChevronDown, IconHandClick, IconKeyboard, IconMinus, IconPlayerPlayFilled, IconPlayerStopFilled, IconPlus, IconVolume, IconVolumeOff, IconX } from '@tabler/icons-react';
+import { ActionIcon, Button, Collapse, NumberInput, Slider, TextInput, Tooltip } from '@mantine/core';
+import { IconCheck, IconChevronDown, IconHandClick, IconMinus, IconPlayerPlayFilled, IconPlayerStopFilled, IconPlus, IconVolume, IconVolumeOff, IconX } from '@tabler/icons-react';
 import { MetronomeEngine, type BeatFrame } from './audio/MetronomeEngine';
 import { clampBpm, MAX_BPM, MIN_BPM, parseOffsets, PRESETS, tapBpm, tempoName } from './rhythm';
 import { loadSettings, saveSettings, type Settings } from './settings';
@@ -29,7 +29,6 @@ export default function App() {
   const [customOpen, setCustomOpen] = useState(true);
   const [customDraft, setCustomDraft] = useState(settings.custom);
   const [customError, setCustomError] = useState('');
-  const [shortcutsOpen, setShortcutsOpen] = useState(false);
   const [tapCount, setTapCount] = useState(0);
   const [active, setActive] = useState(-1);
   const engine = useRef<MetronomeEngine | null>(null);
@@ -116,7 +115,7 @@ export default function App() {
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
-      if (event.ctrlKey || event.metaKey || event.altKey || shortcutsOpen) return;
+      if (event.ctrlKey || event.metaKey || event.altKey) return;
       const target = event.target as HTMLElement;
       if (target.closest('input, textarea, select, [contenteditable="true"], [role="slider"]')) return;
       if (event.code === 'Space') {
@@ -136,7 +135,7 @@ export default function App() {
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [settings.bpm, settings.muted, toggle, tap, update, setBpm, shortcutsOpen]);
+  }, [settings.bpm, settings.muted, toggle, tap, update, setBpm]);
 
   const selectPreset = (id: string) => { update({ preset: id }); setCustomError(''); };
   const applyCustom = () => {
@@ -149,7 +148,6 @@ export default function App() {
   return <div className="app-shell">
     <header className="site-header">
       <div className="brand"><img src={FAVICON_URL} width="36" height="36" alt="" /><h1>节拍器</h1></div>
-      <Tooltip label="键盘快捷键"><ActionIcon variant="subtle" color="dark" size="lg" aria-label="查看键盘快捷键" onClick={() => setShortcutsOpen(true)}><IconKeyboard size={21} stroke={1.5} /></ActionIcon></Tooltip>
     </header>
 
     <main>
@@ -204,7 +202,5 @@ export default function App() {
 
       <PwaStatus playing={playing || starting} />
     </main>
-
-    <Modal closeButtonProps={{ 'aria-label': '关闭快捷键说明' }} opened={shortcutsOpen} onClose={() => setShortcutsOpen(false)} title="键盘快捷键" centered radius="lg"><p className="modal-description">输入文字或操作滑块时，优先使用控件自身的按键。按钮聚焦时，空格仍控制开始 / 停止，Enter 触发按钮。此说明窗口打开时，快捷键暂停。</p><div className="shortcut-list"><div><span>开始 / 停止</span><Kbd>Space</Kbd></div><div><span>点击测速</span><Kbd>T</Kbd></div><div><span>速度 ±1 BPM</span><span><Kbd>↑</Kbd> <Kbd>↓</Kbd></span></div><div><span>速度 ±5 BPM</span><span><Kbd>Shift</Kbd> + <Kbd>↑ / ↓</Kbd></span></div><div><span>静音 / 取消静音</span><Kbd>M</Kbd></div></div></Modal>
   </div>;
 }
