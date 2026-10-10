@@ -11,6 +11,10 @@ button { touch-action: manipulation; }
 .pwa-actions { display: flex; gap: 8px; }
 .site-header { height: 80px; display: flex; align-items: center; justify-content: space-between; }
 .brand { display: flex; align-items: center; gap: 12px; }
+.brand > img { display: block; flex-shrink: 0; }
+.brand-text { display: flex; flex-direction: column; justify-content: center; gap: 2px; height: 40px; }
+.brand-text h1 { line-height: 26px; }
+.app-version { margin: 0; color: var(--mantine-color-dimmed); font-size: 11px; line-height: 12px; letter-spacing: .3px; }
 h1 { color: var(--mantine-color-text); font-weight: 600; font-size: 24px; margin: 0; line-height: 1.4; }
 .workspace { display: grid; grid-template-columns: 1.06fr 1fr; border: 1px solid var(--mantine-color-default-border); border-radius: 20px; background: var(--mantine-color-body); overflow: hidden; box-shadow: var(--mantine-shadow-xs); }
 .tempo-panel, .rhythm-panel { padding: 27px 30px 21px; min-width: 0; }

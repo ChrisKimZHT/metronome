@@ -5,6 +5,7 @@ import { MetronomeEngine, type BeatFrame } from './audio/MetronomeEngine';
 import { clampBpm, MAX_BPM, MIN_BPM, parseOffsets, PRESETS, tapBpm, tempoName } from './rhythm';
 import { loadSettings, saveSettings, type Settings } from './settings';
 import { PwaStatus } from './PwaStatus';
+import { version } from '../package.json';
 
 const COMMON_BPMS = [60, 72, 80, 90, 100, 120, 144, 160, 180, 200];
 const FAVICON_URL = './favicon.svg';
@@ -147,7 +148,7 @@ export default function App() {
 
   return <div className="app-shell">
     <header className="site-header">
-      <div className="brand"><img src={FAVICON_URL} width="36" height="36" alt="" /><h1>节拍器</h1></div>
+      <div className="brand"><img src={FAVICON_URL} width="40" height="40" alt="" /><div className="brand-text"><h1>节拍器</h1><p className="app-version">v{version}</p></div></div>
     </header>
 
     <main>
