@@ -1,3 +1,4 @@
+import i18n from './i18n';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { MetronomeEngine, type EngineSettings } from './audio/MetronomeEngine';
 
@@ -29,7 +30,7 @@ export function useMetronome({ bpm, offsets, volume, muted }: EngineSettings) {
       }
     }, () => {
       changeStatus('stopped');
-      setError('音频已被浏览器暂停，点击开始继续练习。');
+      setError(i18n.t('audio.interrupted'));
     });
     engine.current = instance;
     return () => {
@@ -71,7 +72,7 @@ export function useMetronome({ bpm, offsets, volume, muted }: EngineSettings) {
     } catch {
       if (request !== startRequest.current) return;
       changeStatus('stopped');
-      setError('暂时无法播放声音，请检查浏览器音频权限后重试。');
+      setError(i18n.t('audio.playbackError'));
     }
   }, [changeStatus]);
 

@@ -1,0 +1,140 @@
+{
+  "app": {
+    "name": "节拍器",
+    "version": "v{{version}}",
+    "description": "在线节拍器，支持 BPM 快选、连音、Swing、自定义细分与点击测速。",
+    "offlineDescription": "支持 BPM 快选、连音、Swing、自定义细分与点击测速的离线节拍器。"
+  },
+  "rhythm": {
+    "customName": "自定义节奏",
+    "title": "节拍细分",
+    "reset": "重置",
+    "custom": "自定义",
+    "customSubdivision": "自定义细分",
+    "positions": "拍内细分位置",
+    "help": "主拍为 0，下一拍为 1；多个位置用逗号分隔。",
+    "placeholder": "例如：1/3, 1/2, 2/3",
+    "apply": "应用",
+    "presetLabel": "{{name}}，{{detail}}"
+  },
+  "preview": {
+    "label": "节奏预览",
+    "mainBeat": "主拍",
+    "nextBeat": "下一拍",
+    "soundsPerBeat": "{{count}} 次发声 / 拍"
+  },
+  "tempo": {
+    "title": "速度",
+    "decrease": "速度减 1",
+    "increase": "速度加 1",
+    "input": "每分钟节拍数 BPM",
+    "unit": "BPM",
+    "slider": "速度滑块",
+    "presets": "常用 BPM",
+    "setBpm": "设为 {{bpm}} BPM"
+  },
+  "status": {
+    "playing": "播放中",
+    "starting": "准备中",
+    "stopped": "已停止"
+  },
+  "transport": {
+    "stopLabel": "停止节拍器",
+    "cancelLabel": "取消启动",
+    "startLabel": "开始节拍器",
+    "stop": "停止",
+    "cancel": "取消",
+    "start": "开始",
+    "elapsed": "运行时间",
+    "shortcut": "SPACE"
+  },
+  "tap": {
+    "tooltip": "连续点击测算速度（T）",
+    "label": "点击测速 Tap Tempo",
+    "action": "点击测速",
+    "count": "已点击 {{count}} 次"
+  },
+  "audio": {
+    "unmuteTooltip": "取消静音（M）",
+    "muteTooltip": "静音（M）",
+    "unmute": "取消静音",
+    "mute": "静音",
+    "volume": "音量",
+    "interrupted": "音频已被浏览器暂停，点击开始继续练习。",
+    "playbackError": "暂时无法播放声音，请检查浏览器音频权限后重试。",
+    "percent": "{{value}}%"
+  },
+  "common": {
+    "dismiss": "关闭提示"
+  },
+  "pwa": {
+    "registrationError": "离线缓存注册失败：",
+    "label": "应用更新",
+    "updateError": "更新失败，请稍后重试。",
+    "stopToUpdate": "新版本已就绪，停止播放后可更新。",
+    "updateReady": "新版本已就绪，更新后将刷新页面。",
+    "offlineReady": "已可离线使用，下次断网也能打开节拍器。",
+    "update": "立即更新",
+    "later": "稍后",
+    "acknowledge": "知道了"
+  },
+  "presets": {
+    "quarter": {
+      "name": "四分音符",
+      "detail": "每拍一下"
+    },
+    "eighth": {
+      "name": "八分音符",
+      "detail": "均分 2 份"
+    },
+    "triplet": {
+      "name": "三连音",
+      "detail": "均分 3 份"
+    },
+    "sixteenth": {
+      "name": "十六分音符",
+      "detail": "均分 4 份"
+    },
+    "dotted": {
+      "name": "附点节奏",
+      "detail": "长短 3 : 1"
+    },
+    "swing": {
+      "name": "66% Swing",
+      "detail": "长短 2 : 1"
+    },
+    "quintuplet": {
+      "name": "五连音",
+      "detail": "均分 5 份"
+    },
+    "sextuplet": {
+      "name": "六连音",
+      "detail": "均分 6 份"
+    },
+    "septuplet": {
+      "name": "七连音",
+      "detail": "均分 7 份"
+    },
+    "polyrhythm": {
+      "name": "二对三",
+      "detail": "交叠的律动"
+    },
+    "polyrhythm-3-4": {
+      "name": "三对四",
+      "detail": "三等分与四等分交叠"
+    }
+  },
+  "validation": {
+    "tooMany": "最多添加 16 个细分点。",
+    "invalidPosition": "请输入大于 0、小于 1 的小数或分数，用逗号分隔。"
+  },
+  "tempoNames": {
+    "largo": "Largo · 广板",
+    "adagio": "Adagio · 柔板",
+    "andante": "Andante · 行板",
+    "moderato": "Moderato · 中板",
+    "allegro": "Allegro · 快板",
+    "presto": "Presto · 急板",
+    "prestissimo": "Prestissimo · 最急板"
+  }
+}

@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
 import { Button, Collapse, TextInput } from '@mantine/core';
 import { IconCheck, IconChevronDown, IconPlus } from '@tabler/icons-react';
@@ -29,9 +30,10 @@ type RhythmPanelProps = {
 };
 
 export function RhythmPanel({ preset, custom, onChange }: RhythmPanelProps) {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(true);
   const [draft, setDraft] = useState(custom);
-  const [error, setError] = useState('');
+  const [error, setError] = useState<NonNullable<ReturnType<typeof parseOffsets>['error']> | ''>('');
 
   const selectPreset = (id: string) => {
     onChange({ preset: id });
@@ -57,20 +59,20 @@ export function RhythmPanel({ preset, custom, onChange }: RhythmPanelProps) {
   return (
     <section className="rhythm-panel" aria-labelledby="rhythm-title">
       <div className="panel-heading">
-        <h2 id="rhythm-title">节拍细分</h2>
-        <button className="text-button" onClick={reset}>重置</button>
+        <h2 id="rhythm-title">{t('rhythm.title')}</h2>
+        <button className="text-button" onClick={reset}>{t('rhythm.reset')}</button>
       </div>
       <div className="preset-grid">
         {PRESETS.map((item) => (
           <button
             key={item.id}
             className={`preset ${preset === item.id ? 'selected' : ''}`}
-            aria-label={`${item.name}，${item.detail}`}
+            aria-label={t('rhythm.presetLabel', { name: t(item.nameKey), detail: t(item.detailKey) })}
             aria-pressed={preset === item.id}
             onClick={() => selectPreset(item.id)}
           >
             <RhythmGlyph offsets={item.offsets} />
-            <span>{item.name}</span>
+            <span>{t(item.nameKey)}</span>
             {preset === item.id && <IconCheck className="preset-check" size={14} stroke={2.5} />}
           </button>
         ))}
@@ -81,7 +83,7 @@ export function RhythmPanel({ preset, custom, onChange }: RhythmPanelProps) {
           aria-controls="custom-editor"
         >
           <IconPlus size={23} stroke={1.4} />
-          <span>自定义</span>
+          <span>{t('rhythm.custom')}</span>
         </button>
       </div>
       <button
@@ -90,7 +92,7 @@ export function RhythmPanel({ preset, custom, onChange }: RhythmPanelProps) {
         aria-expanded={open}
         aria-controls="custom-editor"
       >
-        <span>自定义细分</span>
+        <span>{t('rhythm.customSubdivision')}</span>
         <IconChevronDown size={16} className={open ? 'rotated' : ''} />
       </button>
       <Collapse in={open}>
@@ -102,21 +104,21 @@ export function RhythmPanel({ preset, custom, onChange }: RhythmPanelProps) {
             applyCustom();
           }}
         >
-          <label htmlFor="custom-offsets">拍内细分位置</label>
-          <p id="custom-help">主拍为 0，下一拍为 1；多个位置用逗号分隔。</p>
+          <label htmlFor="custom-offsets">{t('rhythm.positions')}</label>
+          <p id="custom-help">{t('rhythm.help')}</p>
           <div className="custom-input-row">
             <TextInput
               id="custom-offsets"
               aria-describedby="custom-help"
-              placeholder="例如：1/3, 1/2, 2/3"
+              placeholder={t('rhythm.placeholder')}
               value={draft}
               onChange={(event) => {
                 setDraft(event.currentTarget.value);
                 setError('');
               }}
-              error={error}
+              error={error ? t(error) : undefined}
             />
-            <Button type="submit" size="sm">应用</Button>
+            <Button type="submit" size="sm">{t('rhythm.apply')}</Button>
           </div>
         </form>
       </Collapse>

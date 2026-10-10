@@ -1,19 +1,32 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
+import zhCN from './src/locales/zh-CN.json';
+
+const escapeHtml = (value: string) => value.replace(/[&<>"']/g, (character) => ({
+  '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
+})[character]!);
 
 export default defineConfig({
   base: './',
   plugins: [
     react(),
+    {
+      name: 'localized-html',
+      transformIndexHtml(html) {
+        return html
+          .replaceAll('__APP_NAME__', escapeHtml(zhCN.app.name))
+          .replaceAll('__APP_DESCRIPTION__', escapeHtml(zhCN.app.description));
+      },
+    },
     VitePWA({
       registerType: 'prompt',
       includeAssets: ['favicon.svg', 'apple-touch-icon.png'],
       manifest: {
         id: './',
-        name: '节拍器',
-        short_name: '节拍器',
-        description: '支持 BPM 快选、连音、Swing、自定义细分与点击测速的离线节拍器。',
+        name: zhCN.app.name,
+        short_name: zhCN.app.name,
+        description: zhCN.app.offlineDescription,
         lang: 'zh-CN',
         start_url: './',
         scope: './',

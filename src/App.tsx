@@ -1,9 +1,10 @@
+import { useTranslation } from 'react-i18next';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { ActionIcon, Button, NumberInput, Slider, Tooltip } from '@mantine/core';
 import { IconHandClick, IconMinus, IconPlayerPlayFilled, IconPlayerStopFilled, IconPlus, IconVolume, IconVolumeOff, IconX } from '@tabler/icons-react';
 import { useMetronome } from './useMetronome';
 import { RhythmPanel } from './RhythmPanel';
-import { clampBpm, MAX_BPM, MIN_BPM, parseOffsets, PRESETS, tapBpm, tempoName } from './rhythm';
+import { clampBpm, MAX_BPM, MIN_BPM, parseOffsets, PRESETS, tapBpm, tempoNameKey } from './rhythm';
 import { loadSettings, saveSettings, type Settings } from './settings';
 import { PwaStatus } from './PwaStatus';
 import { version } from '../package.json';
@@ -12,6 +13,7 @@ const COMMON_BPMS = [60, 72, 80, 90, 100, 120, 144, 160, 180, 200];
 const FAVICON_URL = './favicon.svg';
 
 export default function App() {
+  const { t } = useTranslation();
   const [settings, setSettings] = useState(loadSettings);
   const [bpmDraft, setBpmDraft] = useState<string | number>(settings.bpm);
   const [tapCount, setTapCount] = useState(0);
@@ -21,7 +23,7 @@ export default function App() {
   const offsets = useMemo(() => settings.preset === 'custom'
     ? parseOffsets(settings.custom).offsets : [...(preset?.offsets ?? [])], [settings.preset, settings.custom, preset]);
   const { playing, starting, elapsedSeconds, active, playhead, toggle, error, clearError } = useMetronome({ ...settings, offsets });
-  const rhythmName = preset?.name ?? '自定义节奏';
+  const rhythmName = preset ? t(preset.nameKey) : t('rhythm.customName');
   const elapsedTime = `${String(Math.floor(elapsedSeconds / 60)).padStart(2, '0')}:${String(elapsedSeconds % 60).padStart(2, '0')}`;
 
   const update = useCallback((patch: Partial<Settings>) => setSettings((current) => ({ ...current, ...patch })), []);
@@ -90,17 +92,17 @@ export default function App() {
         <div className="brand">
           <img src={FAVICON_URL} width="40" height="40" alt="" />
           <div className="brand-text">
-            <h1>节拍器</h1>
-            <p className="app-version">v{version}</p>
+            <h1>{t('app.name')}</h1>
+            <p className="app-version">{t('app.version', { version })}</p>
           </div>
         </div>
       </header>
 
       <main>
-        <section className={`visualizer ${playing ? 'running' : ''}`} aria-label="节奏预览">
+        <section className={`visualizer ${playing ? 'running' : ''}`} aria-label={t('preview.label')}>
           <div className="visualizer-info">
             <h2>{rhythmName}</h2>
-            <span>{offsets.length + 1} 次发声 / 拍</span>
+            <span>{t('preview.soundsPerBeat', { count: offsets.length + 1 })}</span>
           </div>
           <div className="rhythm-timeline">
             <div className="timeline-track">
@@ -113,10 +115,10 @@ export default function App() {
                   style={{ left: `${offset * 100}%` }}
                 >
                   <span className="marker-dot" />
-                  <span className="marker-label">{index === 0 ? '主拍' : Number(offset.toFixed(3))}</span>
+                  <span className="marker-label">{index === 0 ? t('preview.mainBeat') : Number(offset.toFixed(3))}</span>
                 </div>
               ))}
-              <div className="end-marker"><span /><span>下一拍</span></div>
+              <div className="end-marker"><span /><span>{t('preview.nextBeat')}</span></div>
             </div>
           </div>
         </section>
@@ -124,20 +126,20 @@ export default function App() {
         <div className="workspace">
           <section className="tempo-panel" aria-labelledby="tempo-title">
             <div className="panel-heading">
-              <h2 id="tempo-title">速度</h2>
+              <h2 id="tempo-title">{t('tempo.title')}</h2>
               <span className={`status ${playing ? 'is-playing' : ''}`}>
-                <i />{playing ? '播放中' : starting ? '准备中' : '已停止'}
+                <i />{playing ? t('status.playing') : starting ? t('status.starting') : t('status.stopped')}
               </span>
             </div>
             <div className="tempo-display">
-              <div className="tempo-name">{tempoName(settings.bpm)}</div>
+              <div className="tempo-name">{t(tempoNameKey(settings.bpm))}</div>
               <div className="bpm-control">
                 <ActionIcon
                   className="step-button"
                   variant="default"
                   size={44}
                   radius="xl"
-                  aria-label="速度减 1"
+                  aria-label={t('tempo.decrease')}
                   disabled={settings.bpm <= MIN_BPM}
                   onClick={() => setBpm(settings.bpm - 1)}
                 >
@@ -145,7 +147,7 @@ export default function App() {
                 </ActionIcon>
                 <NumberInput
                   classNames={{ root: 'bpm-root', input: 'bpm-input' }}
-                  aria-label="每分钟节拍数 BPM"
+                  aria-label={t('tempo.input')}
                   value={bpmDraft}
                   onChange={editBpm}
                   onBlur={() => setBpm(typeof bpmDraft === 'number' ? bpmDraft : settings.bpm)}
@@ -164,18 +166,18 @@ export default function App() {
                   variant="default"
                   size={44}
                   radius="xl"
-                  aria-label="速度加 1"
+                  aria-label={t('tempo.increase')}
                   disabled={settings.bpm >= MAX_BPM}
                   onClick={() => setBpm(settings.bpm + 1)}
                 >
                   <IconPlus size={20} />
                 </ActionIcon>
               </div>
-              <span className="bpm-unit">BPM</span>
+              <span className="bpm-unit">{t('tempo.unit')}</span>
             </div>
             <div className="tempo-slider">
               <Slider
-                thumbLabel="速度滑块"
+                thumbLabel={t('tempo.slider')}
                 value={settings.bpm}
                 onChange={setBpm}
                 min={MIN_BPM}
@@ -186,13 +188,13 @@ export default function App() {
               />
               <div className="range-labels"><span>{MIN_BPM}</span><span>{MAX_BPM}</span></div>
             </div>
-            <div className="bpm-presets" role="group" aria-label="常用 BPM">
+            <div className="bpm-presets" role="group" aria-label={t('tempo.presets')}>
               {COMMON_BPMS.map((bpm) => (
                 <Button
                   key={bpm}
                   className="bpm-preset"
                   variant={settings.bpm === bpm ? 'filled' : 'default'}
-                  aria-label={`设为 ${bpm} BPM`}
+                  aria-label={t('tempo.setBpm', { bpm })}
                   aria-pressed={settings.bpm === bpm}
                   onClick={() => setBpm(bpm)}
                 >
@@ -207,37 +209,37 @@ export default function App() {
                 radius="md"
                 onClick={() => void toggle()}
                 leftSection={playing ? <IconPlayerStopFilled size={20} /> : <IconPlayerPlayFilled size={20} />}
-                aria-label={playing ? '停止节拍器' : starting ? '取消启动' : '开始节拍器'}
+                aria-label={playing ? t('transport.stopLabel') : starting ? t('transport.cancelLabel') : t('transport.startLabel')}
               >
-                {playing ? '停止' : starting ? '取消' : '开始'}
+                {playing ? t('transport.stop') : starting ? t('transport.cancel') : t('transport.start')}
                 {playing ? (
-                  <span className="button-timer" role="timer" aria-label="运行时间">{elapsedTime}</span>
+                  <span className="button-timer" role="timer" aria-label={t('transport.elapsed')}>{elapsedTime}</span>
                 ) : (
-                  <span className="button-key">SPACE</span>
+                  <span className="button-key">{t('transport.shortcut')}</span>
                 )}
               </Button>
-              <Tooltip label="连续点击测算速度（T）">
+              <Tooltip label={t('tap.tooltip')}>
                 <Button
                   className={`tap-button ${tapCount ? 'tapped' : ''}`}
                   variant="default"
                   size="xl"
                   radius="md"
                   onClick={tap}
-                  aria-label="点击测速 Tap Tempo"
+                  aria-label={t('tap.label')}
                 >
                   <IconHandClick size={23} stroke={1.5} />
-                  <span>{tapCount ? `已点击 ${tapCount} 次` : '点击测速'}</span>
+                  <span>{tapCount ? t('tap.count', { count: tapCount }) : t('tap.action')}</span>
                 </Button>
               </Tooltip>
             </div>
             <div className="audio-controls">
-              <Tooltip label={settings.muted ? '取消静音（M）' : '静音（M）'}>
+              <Tooltip label={settings.muted ? t('audio.unmuteTooltip') : t('audio.muteTooltip')}>
                 <ActionIcon
                   variant="subtle"
                   color="dark"
                   size="lg"
                   onClick={() => update({ muted: !settings.muted })}
-                  aria-label={settings.muted ? '取消静音' : '静音'}
+                  aria-label={settings.muted ? t('audio.unmute') : t('audio.mute')}
                   aria-pressed={settings.muted}
                 >
                   {settings.muted || settings.volume === 0 ? (
@@ -248,15 +250,15 @@ export default function App() {
                 </ActionIcon>
               </Tooltip>
               <Slider
-                thumbLabel="音量"
+                thumbLabel={t('audio.volume')}
                 value={settings.volume}
                 onChange={(volume) => update({ volume, muted: false })}
-                label={(value) => `${value}%`}
+                label={(value) => t('audio.percent', { value })}
                 size={4}
                 thumbSize={12}
                 className="volume-slider"
               />
-              <span>{settings.muted ? '静音' : `${settings.volume}%`}</span>
+              <span>{settings.muted ? t('audio.mute') : t('audio.percent', { value: settings.volume })}</span>
             </div>
           </section>
 
@@ -266,7 +268,7 @@ export default function App() {
         {error && (
           <div className="error-message" role="alert">
             <span>{error}</span>
-            <ActionIcon aria-label="关闭提示" color="red" variant="subtle" onClick={clearError}>
+            <ActionIcon aria-label={t('common.dismiss')} color="red" variant="subtle" onClick={clearError}>
               <IconX size={16} />
             </ActionIcon>
           </div>

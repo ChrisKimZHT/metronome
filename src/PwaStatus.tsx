@@ -1,8 +1,10 @@
+import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
 import { Button } from '@mantine/core';
 import { useRegisterSW } from 'virtual:pwa-register/react';
 
 export function PwaStatus({ playing }: { playing: boolean }) {
+  const { t } = useTranslation();
   const [updating, setUpdating] = useState(false);
   const [updateError, setUpdateError] = useState(false);
   const {
@@ -11,7 +13,7 @@ export function PwaStatus({ playing }: { playing: boolean }) {
     updateServiceWorker,
   } = useRegisterSW({
     onRegisterError(error) {
-      console.error('离线缓存注册失败：', error);
+      console.error(t('pwa.registrationError'), error);
     },
   });
 
@@ -34,15 +36,15 @@ export function PwaStatus({ playing }: { playing: boolean }) {
     }
   };
 
-  return <aside className="pwa-status" aria-label="应用更新">
+  return <aside className="pwa-status" aria-label={t('pwa.label')}>
     <p role="status">{updateError
-      ? '更新失败，请稍后重试。'
+      ? t('pwa.updateError')
       : needRefresh
-        ? playing ? '新版本已就绪，停止播放后可更新。' : '新版本已就绪，更新后将刷新页面。'
-        : '已可离线使用，下次断网也能打开节拍器。'}</p>
+        ? playing ? t('pwa.stopToUpdate') : t('pwa.updateReady')
+        : t('pwa.offlineReady')}</p>
     <div className="pwa-actions">
-      {needRefresh && <Button size="xs" disabled={playing} loading={updating} onClick={() => void refresh()}>立即更新</Button>}
-      <Button size="xs" variant="subtle" onClick={dismiss}>{needRefresh ? '稍后' : '知道了'}</Button>
+      {needRefresh && <Button size="xs" disabled={playing} loading={updating} onClick={() => void refresh()}>{t('pwa.update')}</Button>}
+      <Button size="xs" variant="subtle" onClick={dismiss}>{needRefresh ? t('pwa.later') : t('pwa.acknowledge')}</Button>
     </div>
   </aside>;
 }
