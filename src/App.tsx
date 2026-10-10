@@ -169,7 +169,7 @@ export default function App() {
             </div>
             <span className="bpm-unit">BPM</span>
           </div>
-          <div className="tempo-slider"><Slider thumbLabel="速度滑块" value={settings.bpm} onChange={setBpm} min={MIN_BPM} max={MAX_BPM} label={null} size={5} thumbSize={20} /><div className="range-labels"><span>20</span><span>拖动调速 · 点击数字输入</span><span>300</span></div></div>
+          <div className="tempo-slider"><Slider thumbLabel="速度滑块" value={settings.bpm} onChange={setBpm} min={MIN_BPM} max={MAX_BPM} label={null} size={5} thumbSize={20} /><div className="range-labels"><span>20</span><span>300</span></div></div>
           <div className="bpm-presets" role="group" aria-label="常用 BPM">{COMMON_BPMS.map((bpm) => <Button key={bpm} className="bpm-preset" variant={settings.bpm === bpm ? 'filled' : 'default'} aria-label={`设为 ${bpm} BPM`} aria-pressed={settings.bpm === bpm} onClick={() => setBpm(bpm)}>{bpm}</Button>)}</div>
           <div className="transport">
             <Button className="play-button" size="xl" radius="md" onClick={() => void toggle()} leftSection={playing ? <IconPlayerStopFilled size={20} /> : <IconPlayerPlayFilled size={20} />} aria-label={playing ? '停止节拍器' : '开始节拍器'}>{playing ? '停止' : starting ? '取消' : '开始'}{playing ? <span className="button-timer" role="timer" aria-label="运行时间">{elapsedTime}</span> : <span className="button-key">SPACE</span>}</Button>
@@ -185,14 +185,14 @@ export default function App() {
             <span>{item.name}</span>
             {settings.preset === item.id && <IconCheck className="preset-check" size={14} stroke={2.5} />}
           </button>)}<button className={`preset custom-preset ${settings.preset === 'custom' ? 'selected' : ''}`} onClick={() => setCustomOpen((open) => !open)} aria-expanded={customOpen} aria-controls="custom-editor"><IconPlus size={23} stroke={1.4} /><span>自定义</span></button></div>
-          <button className="custom-toggle" onClick={() => setCustomOpen((open) => !open)} aria-expanded={customOpen} aria-controls="custom-editor"><span>自定义细分（小数 / 分数）</span><IconChevronDown size={16} className={customOpen ? 'rotated' : ''} /></button>
+          <button className="custom-toggle" onClick={() => setCustomOpen((open) => !open)} aria-expanded={customOpen} aria-controls="custom-editor"><span>自定义细分</span><IconChevronDown size={16} className={customOpen ? 'rotated' : ''} /></button>
           <Collapse in={customOpen}>
             <form id="custom-editor" className="custom-editor" onSubmit={(event) => { event.preventDefault(); applyCustom(); }}>
               <label htmlFor="custom-offsets">拍内细分位置</label>
               <p id="custom-help">主拍为 0，下一拍为 1；多个位置用逗号分隔。</p>
               <div className="custom-input-row">
                 <TextInput id="custom-offsets" aria-describedby="custom-help" placeholder="例如：1/3, 1/2, 2/3" value={customDraft} onChange={(event) => { setCustomDraft(event.currentTarget.value); setCustomError(''); }} error={customError} />
-                <Button type="submit" size="sm">应用细分</Button>
+                <Button type="submit" size="sm">应用</Button>
               </div>
             </form>
           </Collapse>
