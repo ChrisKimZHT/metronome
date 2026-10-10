@@ -4,6 +4,7 @@ body { margin: 0; min-width: 0; background: var(--mantine-color-body); }
 button, input { -webkit-tap-highlight-color: transparent; }
 button:focus-visible, a:focus-visible { outline: 3px solid var(--mantine-primary-color-filled); outline-offset: 4px; }
 button { touch-action: manipulation; }
+.tabler-icon, .rhythm-glyph, .mantine-CloseButton-root svg { stroke-linecap: round; stroke-linejoin: round; }
 .app-shell { max-width: 1160px; padding: 0 48px 16px; margin: 0 auto; }
 .pwa-status { margin-top: 16px; padding: 12px 16px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; background: var(--mantine-color-blue-light); border-radius: 10px; }
 .pwa-status p { margin: 0; font-size: 13px; }
