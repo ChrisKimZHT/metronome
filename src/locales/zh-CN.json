@@ -1,6 +1,7 @@
 {
   "app": {
     "name": "节拍器",
+    "switchLanguage": "选择语言",
     "version": "v{{version}}",
     "description": "在线节拍器，支持 BPM 快选、连音、Swing、自定义细分与点击测速。",
     "offlineDescription": "支持 BPM 快选、连音、Swing、自定义细分与点击测速的离线节拍器。"

@@ -1,6 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { ActionIcon, Button, NumberInput, Slider, Tooltip } from '@mantine/core';
+import { ActionIcon, Button, Menu, NumberInput, Slider, Tooltip } from '@mantine/core';
+import { IconCheck, IconChevronDown, IconLanguage } from '@tabler/icons-react';
+import { LANGUAGES } from './i18n';
 import { IconHandClick, IconMinus, IconPlayerPlayFilled, IconPlayerStopFilled, IconPlus, IconVolume, IconVolumeOff, IconX } from '@tabler/icons-react';
 import { useMetronome } from './useMetronome';
 import { RhythmPanel } from './RhythmPanel';
@@ -13,7 +15,7 @@ const COMMON_BPMS = [60, 72, 80, 90, 100, 120, 144, 160, 180, 200];
 const FAVICON_URL = './favicon.svg';
 
 export default function App() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [settings, setSettings] = useState(loadSettings);
   const [bpmDraft, setBpmDraft] = useState<string | number>(settings.bpm);
   const [tapCount, setTapCount] = useState(0);
@@ -59,7 +61,7 @@ export default function App() {
     const onKey = (event: KeyboardEvent) => {
       if (event.ctrlKey || event.metaKey || event.altKey) return;
       const target = event.target as HTMLElement;
-      if (target.closest('input, textarea, select, [contenteditable="true"], [role="slider"]')) return;
+      if (target.closest('input, textarea, select, [contenteditable="true"], [role="slider"], [data-language-picker], [role="menu"]')) return;
       if (event.code === 'Space') {
         // Keep Space as the transport shortcut even when a button has focus.
         // Prevent the native Space click so the focused button is not activated too.
@@ -93,9 +95,44 @@ export default function App() {
           <img src={FAVICON_URL} width="40" height="40" alt="" />
           <div className="brand-text">
             <h1>{t('app.name')}</h1>
-            <p className="app-version">{t('app.version', { version })}</p>
+            <p className="app-version">
+              <a href="https://github.com/ChrisKimZHT/metronome" target="_blank" rel="noopener noreferrer">metronome</a>{' '}
+              {t('app.version', { version })}
+            </p>
           </div>
         </div>
+        <Menu position="bottom-end" withinPortal>
+          <Menu.Target>
+            <Button
+              variant="subtle"
+              size="compact-sm"
+              styles={{
+                root: { paddingInline: 8 },
+                section: { marginInline: 0 },
+                inner: { gap: 4 },
+              }}
+              leftSection={<IconLanguage size={16} />}
+              rightSection={<IconChevronDown size={12} />}
+              aria-label={t('app.switchLanguage')}
+              data-language-picker
+            >
+              {LANGUAGES.find((language) => language.code === i18n.resolvedLanguage)?.label}
+            </Button>
+          </Menu.Target>
+          <Menu.Dropdown>
+            {LANGUAGES.map((language) => (
+              <Menu.Item
+                key={language.code}
+                lang={language.code}
+                styles={{ itemSection: { marginInlineStart: 8 } }}
+                rightSection={language.code === i18n.resolvedLanguage ? <IconCheck size={14} /> : null}
+                onClick={() => void i18n.changeLanguage(language.code)}
+              >
+                {language.label}
+              </Menu.Item>
+            ))}
+          </Menu.Dropdown>
+        </Menu>
       </header>
 
       <main>
