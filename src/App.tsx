@@ -92,7 +92,7 @@ export default function App() {
     <div className="app-shell">
       <header className="site-header">
         <div className="brand">
-          <img src={FAVICON_URL} width="40" height="40" alt="" />
+          <img src={FAVICON_URL} width="42" height="42" alt="" />
           <div className="brand-text">
             <h1>{t('app.name')}</h1>
             <p className="app-version">
