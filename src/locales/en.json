@@ -83,7 +83,7 @@
     "triplet": { "name": "Triplets", "detail": "3 equal divisions" },
     "sixteenth": { "name": "Sixteenth notes", "detail": "4 equal divisions" },
     "dotted": { "name": "Dotted rhythm", "detail": "Long–short 3 : 1" },
-    "swing": { "name": "66% Swing", "detail": "Long–short 2 : 1" },
+    "swing": { "name": "Swing", "detail": "Long–short 2 : 1" },
     "quintuplet": { "name": "Quintuplets", "detail": "5 equal divisions" },
     "sextuplet": { "name": "Sextuplets", "detail": "6 equal divisions" },
     "septuplet": { "name": "Septuplets", "detail": "7 equal divisions" },

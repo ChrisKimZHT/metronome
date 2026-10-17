@@ -4,24 +4,31 @@ import { Button, Collapse, TextInput } from '@mantine/core';
 import { IconCheck, IconChevronDown, IconPlus } from '@tabler/icons-react';
 import { parseOffsets, PRESETS } from './rhythm';
 import { DEFAULT_SETTINGS, type Settings } from './settings';
+import quarter from './assets/rhythms/quarter.svg?no-inline';
+import eighth from './assets/rhythms/eighth.svg?no-inline';
+import triplet from './assets/rhythms/triplet.svg?no-inline';
+import sixteenth from './assets/rhythms/sixteenth.svg?no-inline';
+import dotted from './assets/rhythms/dotted.svg?no-inline';
+import swing from './assets/rhythms/swing.svg?no-inline';
+import quintuplet from './assets/rhythms/quintuplet.svg?no-inline';
+import sextuplet from './assets/rhythms/sextuplet.svg?no-inline';
+import septuplet from './assets/rhythms/septuplet.svg?no-inline';
+import polyrhythm from './assets/rhythms/polyrhythm.svg?no-inline';
+import polyrhythm34 from './assets/rhythms/polyrhythm-3-4.svg?no-inline';
 
-function RhythmGlyph({ offsets }: { offsets: readonly number[] }) {
-  return (
-    <svg className="rhythm-glyph" viewBox="0 0 100 32" aria-hidden="true">
-      <line x1="6" x2="94" y1="24" y2="24" stroke="currentColor" strokeOpacity=".18" strokeWidth="1.5" />
-      {[0, ...offsets].map((offset, index) => {
-        const x = 8 + offset * 86;
-        const size = index === 0 ? 3.5 : 2.5;
-        return (
-          <g key={offset}>
-            <line x1={x} x2={x} y1={index === 0 ? 5 : 11} y2="23" stroke="currentColor" strokeWidth={size} strokeLinecap="round" />
-            <circle cx={x} cy="24" r={size} fill="currentColor" />
-          </g>
-        );
-      })}
-    </svg>
-  );
-}
+const glyphs: Record<(typeof PRESETS)[number]['id'], string> = {
+  quarter,
+  eighth,
+  triplet,
+  sixteenth,
+  dotted,
+  swing,
+  quintuplet,
+  sextuplet,
+  septuplet,
+  polyrhythm,
+  'polyrhythm-3-4': polyrhythm34,
+};
 
 type RhythmPanelProps = {
   preset: string;
@@ -71,7 +78,9 @@ export function RhythmPanel({ preset, custom, onChange }: RhythmPanelProps) {
             aria-pressed={preset === item.id}
             onClick={() => selectPreset(item.id)}
           >
-            <RhythmGlyph offsets={item.offsets} />
+            <svg className="rhythm-glyph" viewBox="0 0 120 48" aria-hidden="true" focusable="false">
+              <use href={`${glyphs[item.id]}#glyph`} />
+            </svg>
             <span>{t(item.nameKey)}</span>
             {preset === item.id && <IconCheck className="preset-check" size={14} stroke={2.5} />}
           </button>
