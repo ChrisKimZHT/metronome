@@ -224,6 +224,7 @@ export default function App() {
                 label={null}
                 size={5}
                 thumbSize={20}
+                classNames={{ trackContainer: 'tempo-slider-hit-area' }}
               />
               <div className="range-labels"><span>{MIN_BPM}</span><span>{MAX_BPM}</span></div>
             </div>
@@ -296,6 +297,7 @@ export default function App() {
                 size={4}
                 thumbSize={12}
                 className="volume-slider"
+                classNames={{ trackContainer: 'volume-slider-hit-area' }}
               />
               <span>{settings.muted ? t('audio.mute') : t('audio.percent', { value: settings.volume })}</span>
             </div>

@@ -235,6 +235,22 @@ h1 {
     margin-top: 25px;
 }
 
+.tempo-slider-hit-area,
+.volume-slider-hit-area {
+    position: relative;
+}
+
+.tempo-slider-hit-area::before,
+.volume-slider-hit-area::before {
+    /* Expand pointer targeting without changing the track geometry or layout. */
+    content: '';
+    position: absolute;
+    inset-inline: calc(-1 * var(--slider-size));
+    top: 50%;
+    height: 44px;
+    transform: translateY(-50%);
+}
+
 .range-labels {
     display: flex;
     justify-content: space-between;
@@ -309,7 +325,7 @@ h1 {
     display: flex;
     align-items: center;
     gap: 10px;
-    margin-top: 23px;
+    margin-top: 12px;
     font-size: 10px;
     color: var(--mantine-color-dimmed);
 }
@@ -321,6 +337,7 @@ h1 {
 
 .volume-slider {
     flex: 1;
+    min-width: 0;
 }
 
 .text-button {
@@ -648,7 +665,7 @@ h1 {
     }
 
     .audio-controls {
-        margin-top: 16px;
+        margin-top: 8px;
     }
 
     .preset {
