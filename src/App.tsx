@@ -61,7 +61,9 @@ export default function App() {
     const onKey = (event: KeyboardEvent) => {
       if (event.ctrlKey || event.metaKey || event.altKey) return;
       const target = event.target as HTMLElement;
-      if (target.closest('input, textarea, select, [contenteditable="true"], [role="slider"], [data-language-picker], [role="menu"]')) return;
+      // The language menu restores focus to its trigger when it closes.
+      // Reserve keys for that trigger only while the menu is expanded.
+      if (target.closest('input, textarea, select, [contenteditable="true"], [role="slider"], [data-language-picker][aria-expanded="true"], [role="menu"]')) return;
       if (event.code === 'Space') {
         // Keep Space as the transport shortcut even when a button has focus.
         // Prevent the native Space click so the focused button is not activated too.
